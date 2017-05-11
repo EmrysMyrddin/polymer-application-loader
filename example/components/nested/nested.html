@@ -1,0 +1,20 @@
+<link rel="import" href="../hello/hello.html" />
+<dom-module id="nested-item">
+  <template>
+    <h1>Nested</h1>
+    <hello-item titre="Hello 1"></hello-item>
+    <hello-item titre="Hello 2"></hello-item>
+  </template>
+
+  <script>
+    class Nested extends Polymer.Element {
+      static get is () { return 'nested-item' }
+
+      connectedCallback () {
+        super.connectedCallback();
+      }
+    }
+
+    customElements.define(Nested.is, Nested);
+  </script>
+</dom-module>

@@ -34,20 +34,9 @@ let server = app.listen(8080, function () {
 /** list of components to be loaded */
 let componentsList = [
 	{
-		"componentName": "hello",
-		"eltName": "hello-item",
-		"files": "hello.html",
-        "props": {
-            "titre": "Coucou"
-        }
-	},
-    {
-		"componentName": "hello",
-		"eltName": "hello-item",
-		"files": "hello.html",
-        "props": {
-            "titre": "Coucou 2"
-        }
+		"componentName": "nested",
+		"eltName": "nested-item",
+		"files": "nested.html"
 	},
 ];
 
