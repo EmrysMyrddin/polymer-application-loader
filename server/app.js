@@ -36,12 +36,18 @@ let pluginsList = [
 	{
 		"pluginName": "hello",
 		"eltName": "hello-item",
-		"files": "hello.html"
+		"files": "hello.html",
+        "props": {
+            "titre": "Coucou"
+        }
 	},
     {
 		"pluginName": "hello",
 		"eltName": "hello-item",
-		"files": "hello.html"
+		"files": "hello.html",
+        "props": {
+            "titre": "Coucou 2"
+        }
 	},
 ];
 

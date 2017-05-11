@@ -14,7 +14,10 @@ function importPlugins (pluginsList) {
       let html = '<link rel="import" href="http://localhost:8080/' + plugin.pluginName + '/' + file + '" />';
       document.head.insertAdjacentHTML('beforeend', html);
     })
-    let element = document.createElement(plugin.eltName);
-    document.body.appendChild(element);
+    let elt = document.createElement(plugin.eltName);
+    for (let prop in plugin.props) {
+      elt.setAttribute(prop, plugin.props[prop]);
+    }
+    document.body.appendChild(elt);
   });
 }
