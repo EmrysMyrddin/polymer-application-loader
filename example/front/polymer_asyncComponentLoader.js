@@ -1,17 +1,19 @@
 
 function loadComponents () {
-  polymerAsyncLoader = new Polymer_AsyncComponentLoader('components', 'http://localhost:8080/componentsList');
+  polymerAsyncLoader = new Polymer_AsyncComponentLoader('components', 'http://localhost:8080');
   polymerAsyncLoader.load();
 }
 
 class Polymer_AsyncComponentLoader {
   /**
    * @param polymerElementId {String} Id of the HTML that will encapsulate the components
+   * @param apiUrl {String} Url of the API where the components and the components list are located
    * @param componentsListPath {String} Path of the components list
    */
-  constructor (polymerElementId, componentsListPath) {
+  constructor (polymerElementId, apiUrl, componentsListPath = '/componentsList') {
     this._polymerElementId = polymerElementId;
-    this._componentsListPath = componentsListPath;
+    this._apiUrl = apiUrl;
+    this._componentsListPath = this._apiUrl + componentsListPath;
     this._components = [];
     this._idEltCount = 0;
   }
@@ -51,8 +53,11 @@ class Polymer_AsyncComponentLoader {
         }
 
         component.files.forEach(file => {
-          let html = '<link rel="import" href="http://localhost:8080/' + component.componentName + '/' + file + '" />';
-          document.head.insertAdjacentHTML('beforeend', html);
+          let url = this._apiUrl + '/' + component.componentName + '/' + file;
+          let link = document.createElement('link');
+          link.rel = 'import';
+          link.href = url;
+          document.head.appendChild(link);
         });
       });
       resolve();
