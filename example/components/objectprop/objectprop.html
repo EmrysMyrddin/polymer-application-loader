@@ -1,0 +1,23 @@
+<dom-module id="objectprop-item">
+  <template>
+    <h1>{{user.first_name}} {{user.last_name}}</h1>
+  </template>
+
+  <script>
+    class ObjectProp extends Polymer.Element {
+      static get is () { return 'objectprop-item' }
+
+      static get properties () {
+        return {
+          user: Object
+        }
+      }
+
+      connectedCallback () {
+        super.connectedCallback();
+      }
+    }
+
+    customElements.define(ObjectProp.is, ObjectProp);
+  </script>
+</dom-module>

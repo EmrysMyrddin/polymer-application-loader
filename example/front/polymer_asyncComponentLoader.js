@@ -75,8 +75,12 @@ class Polymer_AsyncComponentLoader {
       this._components.forEach(component => {
         let elt = document.createElement(component.eltName);
         elt.id = this._getUID(component.componentName);
-        for (let prop in component.propValues) {
-          elt.setAttribute(prop, component.propValues[prop]);
+        for (let propName in component.propValues) {
+          if (component.propValues[propName] instanceof Object) {
+            elt.setAttribute(propName, JSON.stringify(component.propValues[propName]));
+          }else {
+            elt.setAttribute(propName, component.propValues[propName]);
+          }
         }
         insertElt.appendChild(elt);
       })
