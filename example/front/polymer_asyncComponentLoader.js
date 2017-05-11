@@ -1,6 +1,6 @@
 
-function loadPlugins () {
-  polymerAsyncLoader = new Polymer_AsyncComponentLoader('components', 'http://localhost:8080/pluginsList');
+function loadComponents () {
+  polymerAsyncLoader = new Polymer_AsyncComponentLoader('components', 'http://localhost:8080/componentsList');
   polymerAsyncLoader.load();
 }
 
@@ -12,7 +12,7 @@ class Polymer_AsyncComponentLoader {
   constructor (polymerElementId, componentsListPath) {
     this._polymerElementId = polymerElementId;
     this._componentsListPath = componentsListPath;
-    this._plugins = [];
+    this._components = [];
     this._idEltCount = 0;
   }
 
@@ -33,7 +33,7 @@ class Polymer_AsyncComponentLoader {
   _fetchComponentsList () {
     return fetch(this._componentsListPath)
              .then(res => res.json())
-             .then(plugins => this._plugins = plugins)
+             .then(components => this._components = components)
              .catch(err => console.log(err));
   }
 
@@ -44,14 +44,14 @@ class Polymer_AsyncComponentLoader {
    */
   _importComponentTemplates () {
     return new Promise((resolve, reject) => {
-      this._plugins.forEach(plugin => {
+      this._components.forEach(component => {
         // Verify if files is an array or not
-        if (!Array.isArray(plugin.files)) {
-          plugin.files = [ plugin.files ];
+        if (!Array.isArray(component.files)) {
+          component.files = [ component.files ];
         }
 
-        plugin.files.forEach(file => {
-          let html = '<link rel="import" href="http://localhost:8080/' + plugin.pluginName + '/' + file + '" />';
+        component.files.forEach(file => {
+          let html = '<link rel="import" href="http://localhost:8080/' + component.componentName + '/' + file + '" />';
           document.head.insertAdjacentHTML('beforeend', html);
         });
       });
@@ -67,11 +67,11 @@ class Polymer_AsyncComponentLoader {
   _instanciateComponents () {
     return new Promise((resolve, reject) => {
       let insertElt = document.getElementById(this._polymerElementId);
-      this._plugins.forEach(plugin => {
-        let elt = document.createElement(plugin.eltName);
-        elt.id = this._getUID(plugin.pluginName);
-        for (let prop in plugin.props) {
-          elt.setAttribute(prop, plugin.props[prop]);
+      this._components.forEach(component => {
+        let elt = document.createElement(component.eltName);
+        elt.id = this._getUID(component.componentName);
+        for (let prop in component.props) {
+          elt.setAttribute(prop, component.props[prop]);
         }
         insertElt.appendChild(elt);
       })
@@ -80,16 +80,16 @@ class Polymer_AsyncComponentLoader {
   }
 
 	/**
-	 * Generate a unique ID for the plugin with the name passed as parameter
-	 * @param pluginName {String}
+	 * Generate a unique ID for the component with the name passed as parameter
+	 * @param componentName {String}
 	 * @returns {string} an unique ID
 	 * @private
 	 */
-  _getUID(pluginName) {
+  _getUID(componentName) {
     this._idEltCount++;
 
     let r = Math.random().toString(32).substr(4, 24);
-    return pluginName + '_' + r + '_' + this._idEltCount;
+    return componentName + '_' + r + '_' + this._idEltCount;
   }
 
 }

@@ -11,7 +11,7 @@ app.use((req, res, next) => {
 })
 
 app.use(express.static('./public/'));
-app.use(express.static('./plugins/'));
+app.use(express.static('./components/'));
 app.use(express.static('./node_modules/'));
 
 
@@ -31,10 +31,10 @@ let server = app.listen(8080, function () {
     console.log("Server running and listening @ " + host + ":" + port);
 });
 
-/** list of plugins to be loaded */
-let pluginsList = [
+/** list of components to be loaded */
+let componentsList = [
 	{
-		"pluginName": "hello",
+		"componentName": "hello",
 		"eltName": "hello-item",
 		"files": "hello.html",
         "props": {
@@ -42,7 +42,7 @@ let pluginsList = [
         }
 	},
     {
-		"pluginName": "hello",
+		"componentName": "hello",
 		"eltName": "hello-item",
 		"files": "hello.html",
         "props": {
@@ -52,11 +52,11 @@ let pluginsList = [
 ];
 
 /**
- * Get a list of JSON for all registered plugins
- * @path /pluginsList
+ * Get a list of JSON for all registered components
+ * @path /componentsList
  * @HTTPMethod GET
  * @returns {string}
  */
-app.get("/pluginsList", function (req, res) {
-    res.send(pluginsList);
+app.get("/componentsList", function (req, res) {
+    res.send(componentsList);
 });
