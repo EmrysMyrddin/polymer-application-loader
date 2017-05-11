@@ -3,10 +3,12 @@
   <head>
     <meta charset="utf-8">
     <title>Polymer template for dynamically loaded plugins</title>
+    <link rel="import" href="bower_components/polymer/polymer-element.html">
     <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="plugins/hello/hello.html" />
   </head>
-  <body>
+  <body onload="loadPlugins()">
     <hello-item></hello-item>
+
+    <script src="load_plugins.js"></script>
   </body>
 </html>

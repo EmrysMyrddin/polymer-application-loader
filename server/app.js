@@ -4,9 +4,17 @@ let express = require('express');
 let app = express();
 let http = require('http').Server(app);
 
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'X-Requested-With')
+    next()
+})
+
 app.use(express.static('./public/'));
 app.use(express.static('./plugins/'));
 app.use(express.static('./node_modules/'));
+
+
 
 app.get('/', function (req, res) {
     res.sendfile("public/index.html");
@@ -26,12 +34,9 @@ let server = app.listen(8080, function () {
 /** list of plugins to be loaded */
 let pluginsList = [
 	{
-		"pluginName": "datetime",
-		"eltName": "datetime-item",
-		"files": "datetime.component.js", //filesToLoad:"xx.js;yy.js" //cssToLoad:"cc.css"
-        "templateFiles": "datetime.template.html",
-        "cssFiles": "datetime.css",
-        "propsValues": {}
+		"pluginName": "hello",
+		"eltName": "hello-item",
+		"files": "hello.html"
 	},
 ];
 
