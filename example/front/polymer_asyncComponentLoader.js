@@ -16,6 +16,7 @@ class Polymer_AsyncComponentLoader {
     this._componentsListPath = this._apiUrl + componentsListPath;
     this._components = [];
     this._idEltCount = 0;
+    this._templates = [];
   }
 
   /**
@@ -54,6 +55,10 @@ class Polymer_AsyncComponentLoader {
 
         component.files.forEach(file => {
           let url = this._apiUrl + '/' + component.componentName + '/' + file;
+          if (this._templates[url] !== undefined) {
+            return resolve()
+          }
+          this._templates[url] = 1;
           let link = document.createElement('link');
           link.rel = 'import';
           link.href = url;
