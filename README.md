@@ -1,21 +1,30 @@
-# \<template_polymer-element\>
+# Load dynamic polymer components from anywhere
 
-Polymer template with dynamically loaded plugins
+Here's a template example that show you how to dynamically load components with just a js file.
 
-## Install the Polymer-CLI
+
+## How to use
+
+### Install the Polymer-CLI
 
 First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your element locally.
 
-## Viewing Your Element
-
 ```
+$ cd example/front
+$ bower install
 $ polymer serve
 ```
 
-## Running Tests
+### Start backend server
 
 ```
-$ polymer test
+$ cd example/server
+$ npm install 
+$ node app.js
 ```
 
-Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.
+Once polymer and node are started, you can view the application at localhost:8081.
+
+### Creating a new plugin component
+
+To create a new component, you have to create a new folder in the plugins directory, then create your component.html file. To have it instanciated on the front, you have to change the json inside the server just like the example below.
