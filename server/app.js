@@ -38,6 +38,11 @@ let pluginsList = [
 		"eltName": "hello-item",
 		"files": "hello.html"
 	},
+    {
+		"pluginName": "hello",
+		"eltName": "hello-item",
+		"files": "hello.html"
+	},
 ];
 
 /**
