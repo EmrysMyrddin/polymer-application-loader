@@ -28,3 +28,21 @@ Once polymer and node are started, you can view the application at localhost:808
 ### Creating a new plugin component
 
 To create a new component, you have to create a new folder in the plugins directory, then create your component.html file. To have it instanciated on the front, you have to change the json inside the server just like the example below.
+
+### Structure of the components list
+
+The json sent by the server for the components list should look like this :
+
+```
+{
+	"componentName": "objectprop",
+	"eltName": "objectprop-item",
+	"files": "objectprop.html",
+    "propValues": {
+        "user": {
+            "first_name": "Valentin",
+            "last_name": "STERN"
+        }
+    }
+}
+```
