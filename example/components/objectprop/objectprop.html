@@ -4,20 +4,22 @@
   </template>
 
   <script>
-    class ObjectProp extends Polymer.Element {
-      static get is () { return 'objectprop-item' }
+    (function () {
+      class ObjectProp extends Polymer.Element {
+        static get is () { return 'objectprop-item' }
 
-      static get properties () {
-        return {
-          user: Object
+        static get properties () {
+          return {
+            user: Object
+          }
+        }
+
+        connectedCallback () {
+          super.connectedCallback();
         }
       }
 
-      connectedCallback () {
-        super.connectedCallback();
-      }
-    }
-
-    customElements.define(ObjectProp.is, ObjectProp);
+      customElements.define(ObjectProp.is, ObjectProp);
+    })();
   </script>
 </dom-module>

@@ -4,20 +4,22 @@
   </template>
 
   <script>
-    class Hello extends Polymer.Element {
-      static get is () { return 'hello-item' }
+    (function () {
+      class Hello extends Polymer.Element {
+        static get is () { return 'hello-item' }
 
-      static get properties () {
-        return {
-          titre: String
+        static get properties () {
+          return {
+            titre: String
+          }
+        }
+
+        connectedCallback () {
+          super.connectedCallback();
         }
       }
 
-      connectedCallback () {
-        super.connectedCallback();
-      }
-    }
-
-    customElements.define(Hello.is, Hello);
+      customElements.define(Hello.is, Hello);
+    })()
   </script>
 </dom-module>

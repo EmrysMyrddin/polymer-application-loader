@@ -7,22 +7,25 @@
   </template>
 
   <script>
-    class Nested extends Polymer.Element {
-      static get is () { return 'nested-item' }
+    (function () {
+      class Nested extends Polymer.Element {
+        static get is () { return 'nested-item' }
 
-      static get properties () {
-        return {
-          title: String,
-          hello1: String,
-          hello2: String
+        static get properties () {
+          return {
+            title: String,
+            hello1: String,
+            hello2: String
+          }
+        }
+
+        connectedCallback () {
+          super.connectedCallback();
         }
       }
 
-      connectedCallback () {
-        super.connectedCallback();
-      }
-    }
+      customElements.define(Nested.is, Nested);
+    })();
 
-    customElements.define(Nested.is, Nested);
   </script>
 </dom-module>
