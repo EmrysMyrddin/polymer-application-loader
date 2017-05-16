@@ -63,7 +63,11 @@ let componentsList = [
                 "last_name": "STERN"
             }
         }
-	}
+	},
+    {
+        "componentName": "shared-styles",
+        "files": "shared-styles.html"
+    }
 ];
 
 /**

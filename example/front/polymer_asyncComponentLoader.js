@@ -78,6 +78,11 @@ class Polymer_AsyncComponentLoader {
     return new Promise((resolve, reject) => {
       let insertElt = document.getElementById(this._polymerElementId);
       this._components.forEach(component => {
+        // Verify if the component has an eltName
+        if (component.eltName === undefined) {
+          return;
+        }
+
         let elt = document.createElement(component.eltName);
         elt.id = this._getUID(component.componentName);
         for (let propName in component.propValues) {
