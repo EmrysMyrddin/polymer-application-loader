@@ -67,7 +67,11 @@ let componentsList = [
     {
         "componentName": "shared-styles",
         "files": "shared-styles.html"
-    }
+    },
+    {
+        "componentName": "font-awesome",
+        "files": "font-awesome.html"
+    },
 ];
 
 /**

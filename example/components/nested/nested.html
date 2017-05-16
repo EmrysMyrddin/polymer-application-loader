@@ -2,7 +2,9 @@
 <dom-module id="nested-item">
   <template>
     <style include="shared-styles"></style>
-    <h1>{{title}}</h1>
+    <style include="font-awesome"></style>
+
+    <h1 class="green">{{title}} <i class="fa fa-github"></i></h1>
     <hello-item titre="{{hello1}}"></hello-item>
     <hello-item titre="{{hello2}}"></hello-item>
   </template>

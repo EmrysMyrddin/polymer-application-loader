@@ -24,8 +24,8 @@ class Polymer_AsyncComponentLoader {
    */
   load () {
     this._fetchComponentsList()
-      .then(_ => this._importComponentTemplates())
-      .then(_ => this._instanciateComponents());
+      .then(() => this._importComponentTemplates())
+      .then(() => this._instanciateComponents());
   }
 
   /**
