@@ -32,47 +32,53 @@ let server = app.listen(8080, function () {
 });
 
 /** list of components to be loaded */
-let componentsList = [
-    {
-        "componentName": "nested",
-        "eltName": "nested-item",
-        "files": "nested.html",
-        "propValues": {
-            "title": "Nested 1",
-            "hello1": "Hello 1",
-            "hello2": "Hello 2"
-        }
-    },
-    {
-        "componentName": "nested",
-        "eltName": "nested-item",
-        "files": "nested.html",
-        "propValues": {
-            "title": "Nested 2",
-            "hello1": "Hello 3",
-            "hello2": "Hello 4"
-        }
-    },
-	{
-		"componentName": "objectprop",
-		"eltName": "objectprop-item",
-		"files": "objectprop.html",
-        "propValues": {
-            "user": {
-                "first_name": "Valentin",
-                "last_name": "STERN"
+let componentsList = {
+    "styles": [ 
+        "css/font.css",
+        "css/font-awesome.css"
+    ],
+    "components": [
+        {
+            "componentName": "nested",
+            "eltName": "nested-item",
+            "files": "nested.html",
+            "propValues": {
+                "title": "Nested 1",
+                "hello1": "Hello 1",
+                "hello2": "Hello 2"
             }
+        },
+        {
+            "componentName": "nested",
+            "eltName": "nested-item",
+            "files": "nested.html",
+            "propValues": {
+                "title": "Nested 2",
+                "hello1": "Hello 3",
+                "hello2": "Hello 4"
+            }
+        },
+        {
+            "componentName": "objectprop",
+            "eltName": "objectprop-item",
+            "files": "objectprop.html",
+            "propValues": {
+                "user": {
+                    "first_name": "Valentin",
+                    "last_name": "STERN"
+                }
+            }
+        },
+        {
+            "componentName": "shared-styles",
+            "files": "shared-styles.html"
+        },
+        {
+            "componentName": "font-awesome",
+            "files": "font-awesome.html"
         }
-	},
-    {
-        "componentName": "shared-styles",
-        "files": "shared-styles.html"
-    },
-    {
-        "componentName": "font-awesome",
-        "files": "font-awesome.html"
-    },
-];
+    ]
+};
 
 /**
  * Get a list of JSON for all registered components

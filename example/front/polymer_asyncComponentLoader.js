@@ -15,6 +15,7 @@ class Polymer_AsyncComponentLoader {
     this._apiUrl = apiUrl;
     this._componentsListPath = this._apiUrl + componentsListPath;
     this._components = [];
+    this._styles = [];
     this._idEltCount = 0;
     this._templates = [];
   }
@@ -24,6 +25,7 @@ class Polymer_AsyncComponentLoader {
    */
   load () {
     this._fetchComponentsList()
+      .then(() => this._loadStyles())
       .then(() => this._importComponentTemplates())
       .then(() => this._instanciateComponents());
   }
@@ -36,8 +38,29 @@ class Polymer_AsyncComponentLoader {
   _fetchComponentsList () {
     return fetch(this._componentsListPath)
              .then(res => res.json())
-             .then(components => this._components = components)
+             .then(config => {
+               this._components = config.components;
+               this._styles = config.styles;
+             })
              .catch(err => console.log(err));
+  }
+
+  /**
+   * Load every global styles
+   * @private
+   */
+  _loadStyles () {
+    // Verify if files are in an array or not
+    if (!Array.isArray(this._styles)) {
+      this._styles = [this._styles];
+    }
+    this._styles.forEach(style => {
+      const elt = document.createElement('link');
+      elt.rel = 'stylesheet';
+      elt.type = 'text/css';
+      elt.href = this._apiUrl + '/' + style;
+      document.head.appendChild(elt);
+    })
   }
 
   /**
@@ -48,7 +71,7 @@ class Polymer_AsyncComponentLoader {
   _importComponentTemplates () {
     return new Promise((resolve, reject) => {
       this._components.forEach(component => {
-        // Verify if files is an array or not
+        // Verify if files are in an array or not
         if (!Array.isArray(component.files)) {
           component.files = [ component.files ];
         }
