@@ -52,6 +52,9 @@ class Polymer_AsyncComponentLoader {
    * @private
    */
   _loadStyles () {
+    if (this._styles === undefined) {
+      return;
+    }
     // Verify if files are in an array or not
     if (!Array.isArray(this._styles)) {
       this._styles = [this._styles];
@@ -70,6 +73,9 @@ class Polymer_AsyncComponentLoader {
    * @private
    */
   _loadScripts () {
+    if (this._scripts === undefined) {
+      return;
+    }
     // Verify if files are in an array or not
     if (!Array.isArray(this._scripts)) {
       this._scripts = [this._scripts];

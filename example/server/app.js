@@ -33,10 +33,6 @@ let server = app.listen(8080, function () {
 
 /** list of components to be loaded */
 let componentsList = {
-    "styles": [ 
-        "css/font.css",
-        "css/font-awesome.css"
-    ],
     "scripts": "lodash/lodash.min.js",
     "components": [
         {
