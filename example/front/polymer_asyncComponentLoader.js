@@ -26,6 +26,7 @@ class Polymer_AsyncComponentLoader {
   load () {
     this._fetchComponentsList()
       .then(() => this._loadStyles())
+      .then(() => this._loadScripts())
       .then(() => this._importComponentTemplates())
       .then(() => this._instanciateComponents());
   }
@@ -41,6 +42,7 @@ class Polymer_AsyncComponentLoader {
              .then(config => {
                this._components = config.components;
                this._styles = config.styles;
+               this._scripts = config.scripts;
              })
              .catch(err => console.log(err));
   }
@@ -61,6 +63,22 @@ class Polymer_AsyncComponentLoader {
       elt.href = this._apiUrl + '/' + style;
       document.head.appendChild(elt);
     })
+  }
+
+  /**
+   * Load every (external) scripts
+   * @private
+   */
+  _loadScripts () {
+    // Verify if files are in an array or not
+    if (!Array.isArray(this._scripts)) {
+      this._scripts = [this._scripts];
+    }
+    this._scripts.forEach(script => {
+      const elt = document.createElement('script');
+      elt.src = this._apiUrl + '/' + script
+      document.head.appendChild(elt);
+    });
   }
 
   /**

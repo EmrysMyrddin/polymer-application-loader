@@ -37,6 +37,7 @@ let componentsList = {
         "css/font.css",
         "css/font-awesome.css"
     ],
+    "scripts": "lodash/lodash.min.js",
     "components": [
         {
             "componentName": "nested",
@@ -76,6 +77,11 @@ let componentsList = {
         {
             "componentName": "font-awesome",
             "files": "font-awesome.html"
+        },
+        {
+            "componentName": "lodash-example",
+            "eltName": "lodash-item",
+            "files": "lodash-example.html"
         }
     ]
 };
