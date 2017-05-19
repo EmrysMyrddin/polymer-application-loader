@@ -73,18 +73,23 @@ class Polymer_AsyncComponentLoader {
    * @private
    */
   _loadScripts () {
-    if (this._scripts === undefined) {
-      return;
-    }
-    // Verify if files are in an array or not
-    if (!Array.isArray(this._scripts)) {
-      this._scripts = [this._scripts];
-    }
-    this._scripts.forEach(script => {
-      const elt = document.createElement('script');
-      elt.src = this._apiUrl + '/' + script
-      document.head.appendChild(elt);
-    });
+    return new Promise((resolve, reject) => {
+      if (this._scripts === undefined) {
+        return;
+      }
+      // Verify if files are in an array or not
+      if (!Array.isArray(this._scripts)) {
+        this._scripts = [this._scripts];
+      }
+      this._scripts.forEach(script => {
+        const elt = document.createElement('script');
+        elt.async = true;
+        elt.onload = resolve;
+        elt.onerror = reject;
+        elt.src = this._apiUrl + '/' + script
+        document.head.appendChild(elt);
+      });
+    })
   }
 
   /**
