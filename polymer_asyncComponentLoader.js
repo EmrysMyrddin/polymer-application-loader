@@ -81,14 +81,30 @@ class Polymer_AsyncComponentLoader {
       if (!Array.isArray(this._scripts)) {
         this._scripts = [this._scripts];
       }
-      this._scripts.forEach(script => {
-        const elt = document.createElement('script');
-        elt.async = true;
-        elt.onload = resolve;
-        elt.onerror = reject;
-        elt.src = this._apiUrl + '/' + script
-        document.head.appendChild(elt);
-      });
+
+      const fns = [];
+      this._scripts.forEach((script) => fns.push(() => this._loadScript(script)));
+      
+      // Resolve promise after every script loaded
+      fns.push(() => resolve())
+      fns.reduce((p, fn) => p.then(() => fn()), Promise.resolve())
+    })
+  }
+
+  /**
+   * Create the promise to load the script
+   * @param {String} url
+   */
+  _loadScript (url) {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+
+      script.async = true;
+      script.onload = resolve;
+      script.onerror = reject;
+      script.src = this._apiUrl + '/' + url;
+
+      document.head.appendChild(script);
     })
   }
 
