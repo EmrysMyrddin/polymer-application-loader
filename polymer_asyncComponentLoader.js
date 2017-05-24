@@ -1,8 +1,4 @@
 
-function loadComponents () {
-  polymerAsyncLoader = new Polymer_AsyncComponentLoader('components', 'http://localhost:8080');
-  polymerAsyncLoader.load();
-}
 
 class Polymer_AsyncComponentLoader {
   /**
