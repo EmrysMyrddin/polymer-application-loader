@@ -37,7 +37,7 @@ let componentsList = {
         "css/font.css",
         "css/font-awesome.css"
     ],
-    "scripts": "lodash/lodash.min.js",
+    "scripts": "bower_components/lodash/lodash.js",
     "components": [
         {
             "componentName": "nested",

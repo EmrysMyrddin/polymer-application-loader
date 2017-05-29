@@ -1,15 +1,13 @@
-
-
 class Polymer_AsyncComponentLoader {
   /**
    * @param polymerElementId {String} Id of the HTML that will encapsulate the components
    * @param apiUrl {String} Url of the API where the components and the components list are located
    * @param componentsListPath {String} Path of the components list
    */
-  constructor (polymerElementId, apiUrl, componentsListPath = '/componentsList') {
+  constructor (polymerElementId, componentsListUrl, defaultComponentUrl = '') {
     this._polymerElementId = polymerElementId;
-    this._apiUrl = apiUrl;
-    this._componentsListPath = this._apiUrl + componentsListPath;
+    this._componentsListUrl = componentsListUrl;
+    this._defaultComponentUrl = defaultComponentUrl;
     this._components = [];
     this._styles = [];
     this._idEltCount = 0;
@@ -33,7 +31,7 @@ class Polymer_AsyncComponentLoader {
    * @private
    */
   _fetchComponentsList () {
-    return fetch(this._componentsListPath)
+    return fetch(this._componentsListUrl)
              .then(res => res.json())
              .then(config => {
                this._components = config.components;
@@ -59,7 +57,7 @@ class Polymer_AsyncComponentLoader {
       const elt = document.createElement('link');
       elt.rel = 'stylesheet';
       elt.type = 'text/css';
-      elt.href = this._apiUrl + '/' + style;
+      elt.href = style;
       document.head.appendChild(elt);
     })
   }
@@ -98,7 +96,7 @@ class Polymer_AsyncComponentLoader {
       script.async = true;
       script.onload = resolve;
       script.onerror = reject;
-      script.src = this._apiUrl + '/' + url;
+      script.src = url;
 
       document.head.appendChild(script);
     })
@@ -118,12 +116,13 @@ class Polymer_AsyncComponentLoader {
         }
 
         component.files.forEach(file => {
-          let url = this._apiUrl + '/' + component.componentName + '/' + file;
+          const componentUrl = component.url || this._defaultComponentUrl;
+          const url = componentUrl + '/' + component.componentName + '/' + file;
           if (this._templates[url] !== undefined) {
             return resolve()
           }
           this._templates[url] = 1;
-          let link = document.createElement('link');
+          const link = document.createElement('link');
           link.rel = 'import';
           link.href = url;
           document.head.appendChild(link);
