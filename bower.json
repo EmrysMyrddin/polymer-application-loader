@@ -1,11 +1,11 @@
 {
   "name": "polymer-application-loader",
-  "homepage": "https://github.com/Sehsyha/polymer_dynamic_components",
+  "homepage": "https://github.com/Sehsyha/polymer-application-loader",
   "authors": [
     "Sehsyha <valentin.stern@zenika.com>"
   ],
   "description": "Polymer dynamic component loader",
-  "main": "polymer_asyncComponentLoader.js",
+  "main": "loader.js",
   "keywords": [
     "polymer"
   ],
