@@ -6,14 +6,8 @@
     <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="bower_components/polymer/polymer.html">
   </head>
-  <body onload="loadComponents()">
+  <body onload="PolymerApplicationLoader.load('components', 'http://localhost:8080/componentsList', 'http://localhost:8080')">
     <section id="components"></section>
     <script src="../../loader.js"></script>
-    <script>
-      function loadComponents () {
-        polymerAsyncLoader = new Polymer_AsyncComponentLoader('components', 'http://localhost:8080/componentsList', 'http://localhost:8080');
-        polymerAsyncLoader.load();
-      }
-    </script>
   </body>
 </html>
