@@ -1,10 +1,16 @@
-class Polymer_AsyncComponentLoader {
+class PolymerApplicationLoader {
   /**
+   * Load every components listed with the list at componentsListPath
+   * Load general CSS
+   * Then load general scripts
+   * Then import componnent templates
+   * Then instanciate components
+   * 
    * @param polymerElementId {String} Id of the HTML that will encapsulate the components
    * @param apiUrl {String} Url of the API where the components and the components list are located
    * @param componentsListPath {String} Path of the components list
    */
-  constructor (polymerElementId, componentsListUrl, defaultComponentUrl = '') {
+  static load (polymerElementId, componentsListUrl, defaultComponentUrl = '') {
     this._polymerElementId = polymerElementId;
     this._componentsListUrl = componentsListUrl;
     this._defaultComponentUrl = defaultComponentUrl;
@@ -12,12 +18,8 @@ class Polymer_AsyncComponentLoader {
     this._styles = [];
     this._idEltCount = 0;
     this._templates = [];
-  }
 
-  /**
-   * Load every components listed with the list at componentsListPath
-   */
-  load () {
+    // Laucnh components loading
     this._fetchComponentsList()
       .then(() => this._loadStyles())
       .then(() => this._loadScripts())
@@ -30,7 +32,7 @@ class Polymer_AsyncComponentLoader {
    * @returns {Promise}
    * @private
    */
-  _fetchComponentsList () {
+  static _fetchComponentsList () {
     return fetch(this._componentsListUrl)
              .then(res => res.json())
              .then(config => {
@@ -45,7 +47,7 @@ class Polymer_AsyncComponentLoader {
    * Load every global styles
    * @private
    */
-  _loadStyles () {
+  static _loadStyles () {
     if (this._styles === undefined) {
       return;
     }
@@ -63,13 +65,13 @@ class Polymer_AsyncComponentLoader {
   }
 
   /**
-   * Load every (external) scripts
+   * Load every (external) scripts such as libraries
    * @private
    */
-  _loadScripts () {
+  static _loadScripts () {
     return new Promise((resolve, reject) => {
       if (this._scripts === undefined) {
-        return;
+        return resolve();
       }
       // Verify if files are in an array or not
       if (!Array.isArray(this._scripts)) {
@@ -89,7 +91,7 @@ class Polymer_AsyncComponentLoader {
    * Create the promise to load the script
    * @param {String} url
    */
-  _loadScript (url) {
+  static _loadScript (url) {
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
 
@@ -107,7 +109,7 @@ class Polymer_AsyncComponentLoader {
    * @returns {Promise}
    * @private
    */
-  _importComponentTemplates () {
+  static _importComponentTemplates () {
     return new Promise((resolve, reject) => {
       this._components.forEach(component => {
         // Verify if files are in an array or not
@@ -137,13 +139,13 @@ class Polymer_AsyncComponentLoader {
    * @returns {Promise}
    * @private
    */
-  _instanciateComponents () {
+  static _instanciateComponents () {
     return new Promise((resolve, reject) => {
       let insertElt = document.getElementById(this._polymerElementId);
       this._components.forEach(component => {
         // Verify if the component has an eltName
         if (component.eltName === undefined) {
-          return;
+          return resolve();
         }
 
         let elt = document.createElement(component.eltName);
@@ -167,7 +169,7 @@ class Polymer_AsyncComponentLoader {
 	 * @returns {string} an unique ID
 	 * @private
 	 */
-  _getUID(componentName) {
+  static _getUID(componentName) {
     this._idEltCount++;
 
     let r = Math.random().toString(32).substr(4, 24);
