@@ -1,5 +1,5 @@
 {
-  "name": "polymer-dynamic-loader-template",
+  "name": "polymer-application-loader-template",
   "description": "Polymer template with dynamically loaded plugins",
   "main": "index.html",
   "dependencies": {
@@ -12,6 +12,7 @@
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0-rc.5"
   },
   "resolutions": {
-    "polymer": "^2.0.0-rc.2"
+    "polymer": "^2.0.0-rc.2",
+    "lodash": "^4.17.4"
   }
 }
