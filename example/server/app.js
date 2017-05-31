@@ -11,7 +11,7 @@ app.use((req, res, next) => {
 })
 
 app.use(express.static('./public/'));
-app.use(express.static('./components/'));
+app.use(express.static('../components/'));
 app.use(express.static('./node_modules/'));
 
 
