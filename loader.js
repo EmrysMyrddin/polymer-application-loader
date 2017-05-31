@@ -18,8 +18,7 @@ class PolymerApplicationLoader {
     this._styles = [];
     this._idEltCount = 0;
     this._templates = [];
-
-    // Laucnh components loading
+    // Launch components loading
     this._fetchComponentsList()
       .then(() => this._loadStyles())
       .then(() => this._loadScripts())
