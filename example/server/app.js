@@ -33,10 +33,7 @@ let server = app.listen(8080, function () {
 
 /** list of components to be loaded */
 let componentsList = {
-    "styles": [ 
-        "css/font.css",
-        "css/font-awesome.css"
-    ],
+    "styles": "css/font.css",
     "scripts": "bower_components/lodash/lodash.js",
     "components": [
         {
@@ -47,7 +44,24 @@ let componentsList = {
                 "title": "Nested 1",
                 "hello1": "Hello 1",
                 "hello2": "Hello 2"
-            }
+            },
+            "slots": [ 
+                {
+                    "name": "title",
+                    "tag": "h1",
+                    "content": "Hello <span class=\"chartreuse\">World</span>"
+                },
+                {
+                    "name": "icon",
+                    "tag": "i",
+                    "className": "fa fa-github"
+                },
+                {
+                    "name": "icon",
+                    "tag": "i",
+                    "className": "fa fa-github"
+                }
+            ]
         },
         {
             "componentName": "nested",

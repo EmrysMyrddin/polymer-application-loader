@@ -156,10 +156,35 @@ class PolymerApplicationLoader {
             elt.setAttribute(propName, component.propValues[propName]);
           }
         }
+        if (component.slots != undefined) {
+          this._addSlots(elt, component.slots)
+        }
         insertElt.appendChild(elt);
       })
       resolve();
     })
+  }
+
+  /**
+   * Add slots to a component before its inserted in the page
+   * @param {HTMLElement} elt Create component element
+   * @param {Array} slots Slots to add to the page
+   */
+  static _addSlots (elt, slots) {
+    if (!Array.isArray(slots)) {
+      slots = [slots];
+    }
+    slots.forEach((slot) => {
+      let slotElt = document.createElement(slot.tag);
+      slotElt.slot = slot.name;
+      if (slot.className !== undefined) {
+        slotElt.className = slot.className;
+      }
+      if (slot.content !== undefined) {
+        slotElt.innerHTML = slot.content;
+      }
+      elt.appendChild(slotElt)
+    });
   }
 
 	/**
