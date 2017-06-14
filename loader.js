@@ -18,6 +18,10 @@ class PolymerApplicationLoader {
     this._styles = [];
     this._idEltCount = 0;
     this._templates = [];
+    this._grid = false;
+    this._rowsFactor = 0;
+    this._colsFactor = 0;
+
     // Launch components loading
     this._fetchComponentsList()
       .then(() => this._loadStyles())
@@ -35,7 +39,12 @@ class PolymerApplicationLoader {
     return fetch(this._componentsListUrl)
              .then(res => res.json())
              .then(config => {
-               this._components = config.components;
+               if (config.rows && config.cols) {
+                 this._rowsFactor = 100 / config.rows;
+                 this._colsFactor = 100 / config.cols;
+                 this._grid = true;
+               }
+               this._components = config.components || config.plugins;
                this._styles = config.styles;
                this._scripts = config.scripts;
              })
@@ -158,6 +167,14 @@ class PolymerApplicationLoader {
         }
         if (component.slots != undefined) {
           this._addSlots(elt, component.slots)
+        }
+        if (component.x !== undefined && component.y !== undefined && component.rows !== undefined && component.cols !== undefined && this._grid) {
+          elt.style.display = 'block';
+          elt.style.position = 'absolute';
+          elt.style.left = component.x * this._colsFactor + '%';
+          elt.style.top = component.y * this._rowsFactor + '%';
+          elt.style.height = component.rows * this._rowsFactor + '%';
+          elt.style.width = component.cols * this._colsFactor + '%';
         }
         insertElt.appendChild(elt);
       })
