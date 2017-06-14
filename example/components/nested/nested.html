@@ -3,14 +3,21 @@
   <template>
     <style include="shared-styles"></style>
     <style include="font-awesome"></style>
+    <style>
+      ::slotted(h1) {
+        font-size: 3em;
+      }
+    </style>
 
+    <slot name="icon"></slot>
+    <slot name="title"></slot>
     <h1 class="green">{{title}} <i class="fa fa-github"></i></h1>
     <hello-item titre="{{hello1}}"></hello-item>
     <hello-item titre="{{hello2}}"></hello-item>
   </template>
 
   <script>
-    (function () {
+    (() => {
       class Nested extends Polymer.Element {
         static get is () { return 'nested-item' }
 

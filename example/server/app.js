@@ -33,26 +33,50 @@ let server = app.listen(8080, function () {
 
 /** list of components to be loaded */
 let componentsList = {
-    "styles": [ 
-        "css/font.css",
-        "css/font-awesome.css"
-    ],
+    "styles": "css/font.css",
     "scripts": "bower_components/lodash/lodash.js",
-    "components": [
+    "rows": 20,
+    "cols": 20,
+    "plugins": [
         {
             "componentName": "nested",
             "eltName": "nested-item",
             "files": "nested.html",
+            "x": 0,
+            "y": 0,
+            "rows": 10,
+            "cols": 2,
             "propValues": {
                 "title": "Nested 1",
                 "hello1": "Hello 1",
                 "hello2": "Hello 2"
-            }
+            },
+            "slots": [ 
+                {
+                    "name": "title",
+                    "tag": "h1",
+                    "content": "Hello <span class=\"chartreuse\">World</span>"
+                },
+                {
+                    "name": "icon",
+                    "tag": "i",
+                    "className": "fa fa-github"
+                },
+                {
+                    "name": "icon",
+                    "tag": "i",
+                    "className": "fa fa-github"
+                }
+            ]
         },
         {
             "componentName": "nested",
             "eltName": "nested-item",
             "files": "nested.html",
+            "x": 17,
+            "y": 0,
+            "rows": 3,
+            "cols": 20,
             "propValues": {
                 "title": "Nested 2",
                 "hello1": "Hello 3",
@@ -63,6 +87,10 @@ let componentsList = {
             "componentName": "objectprop",
             "eltName": "objectprop-item",
             "files": "objectprop.html",
+            "x": 3,
+            "y": 0,
+            "rows": 3,
+            "cols": 20,
             "propValues": {
                 "user": {
                     "first_name": "Valentin",
