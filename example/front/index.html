@@ -9,7 +9,12 @@
     <link rel="stylesheet" type="text/css" href="css/style.css" />
   </head>
   <body onload="PolymerApplicationLoader.load('components', 'http://localhost:8080/componentsList', 'http://localhost:8080')">
-    <section id="components"></section>
+    <div id="wrapper">
+      <header id="header">
+        <h1>Components on this page are dynamically loaded at runtime and displayed with a grid system (optional).</h1>
+    </header>
+      <section id="components"></section>
+    </div>
     <script src="../../loader.js"></script>
   </body>
 </html>

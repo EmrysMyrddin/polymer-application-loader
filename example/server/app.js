@@ -42,9 +42,9 @@ let componentsList = {
             "componentName": "nested",
             "eltName": "nested-item",
             "files": "nested.html",
-            "x": 0,
-            "y": 0,
-            "rows": 10,
+            "x": 1,
+            "y": 9,
+            "rows": 8,
             "cols": 2,
             "propValues": {
                 "title": "Nested 1",
@@ -57,7 +57,7 @@ let componentsList = {
                     "tag": "h1",
                     "content": "Hello <span class=\"chartreuse\">World</span>"
                 },
-                {
+                
                     "name": "icon",
                     "tag": "i",
                     "className": "fa fa-github"
@@ -74,9 +74,9 @@ let componentsList = {
             "eltName": "nested-item",
             "files": "nested.html",
             "x": 17,
-            "y": 0,
-            "rows": 3,
-            "cols": 20,
+            "y": 9,
+            "rows": 6,
+            "cols": 2,
             "propValues": {
                 "title": "Nested 2",
                 "hello1": "Hello 3",
@@ -88,13 +88,13 @@ let componentsList = {
             "eltName": "objectprop-item",
             "files": "objectprop.html",
             "x": 3,
-            "y": 0,
-            "rows": 3,
-            "cols": 20,
+            "y": 16,
+            "rows": 1,
+            "cols": 14,
             "propValues": {
                 "user": {
-                    "first_name": "Valentin",
-                    "last_name": "STERN"
+                    "name": "Sehsyha",
+                    "url": "https://github.com/Sehsyha"
                 }
             }
         },

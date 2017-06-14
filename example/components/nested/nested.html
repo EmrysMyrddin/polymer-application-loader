@@ -4,6 +4,12 @@
     <style include="shared-styles"></style>
     <style include="font-awesome"></style>
     <style>
+      :host {
+        background: rgba(0,0,0,0.2);
+        padding: 10px;
+        text-align: center;
+      }
+      
       ::slotted(h1) {
         font-size: 3em;
       }
@@ -13,7 +19,9 @@
     <slot name="title"></slot>
     <h1 class="green">{{title}} <i class="fa fa-github"></i></h1>
     <hello-item titre="{{hello1}}"></hello-item>
-    <hello-item titre="{{hello2}}"></hello-item>
+    <hello-item titre="{{hello2}}"></hello-item>    
+    <slot name="icon"></slot>
+    <slot name="title"></slot>
   </template>
 
   <script>

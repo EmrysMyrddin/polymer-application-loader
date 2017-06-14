@@ -1,6 +1,11 @@
 <dom-module id="objectprop-item">
   <template>
-    <h1>{{user.first_name}} {{user.last_name}}</h1>
+    <style>
+      :host {
+        text-align: center;
+      }
+    </style>
+    <h1>Created by {{user.name}}<br />{{user.url}}</h1>
   </template>
 
   <script>
