@@ -76,7 +76,7 @@ class PolymerApplicationLoader {
   }
 
   /**
-   * 0
+   * Add style variables into the body element
    */
   static _addStyleVars () {
     for(var style in this._styleVars) {
@@ -136,6 +136,8 @@ class PolymerApplicationLoader {
         if (!Array.isArray(component.files)) {
           component.files = [ component.files ];
         }
+
+        component.componentName = component.componentName || '.';
 
         component.files.forEach(file => {
           const componentUrl = component.url || this._defaultComponentUrl;

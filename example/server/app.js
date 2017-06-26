@@ -111,6 +111,13 @@ let componentsList = {
             "componentName": "lodash-example",
             "eltName": "lodash-item",
             "files": "lodash-example.html"
+        },
+        {
+            "url": "https://raw.githubusercontent.com/Zenika/marcel-plugin-datetime/master",
+            "eltName": "datetime-item",
+            "files": [
+                "datetime.html"
+            ]
         }
     ]
 };
