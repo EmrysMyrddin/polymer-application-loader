@@ -58,7 +58,7 @@ let componentsList = {
                     "tag": "h1",
                     "content": "Hello <span class=\"chartreuse\">World</span>"
                 },
-                
+                {
                     "name": "icon",
                     "tag": "i",
                     "className": "fa fa-github"
