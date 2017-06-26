@@ -21,10 +21,12 @@ class PolymerApplicationLoader {
     this._grid = false;
     this._rowsFactor = 0;
     this._colsFactor = 0;
+    this._styleVars = {};
 
     // Launch components loading
     this._fetchComponentsList()
       .then(() => this._loadStyles())
+      .then(() => this._addStyleVars())
       .then(() => this._loadScripts())
       .then(() => this._importComponentTemplates())
       .then(() => this._instanciateComponents());
@@ -47,6 +49,7 @@ class PolymerApplicationLoader {
                this._components = config.components || config.plugins;
                this._styles = config.styles;
                this._scripts = config.scripts;
+               this._styleVars = config.styleVars || {};
              })
              .catch(err => console.log(err));
   }
@@ -70,6 +73,15 @@ class PolymerApplicationLoader {
       elt.href = style;
       document.head.appendChild(elt);
     })
+  }
+
+  /**
+   * 0
+   */
+  static _addStyleVars () {
+    for(var style in this._styleVars) {
+      document.body.style.setProperty('--' + style, this._styleVars[style])
+    }
   }
 
   /**

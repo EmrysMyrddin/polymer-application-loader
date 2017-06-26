@@ -35,6 +35,7 @@ let server = app.listen(8080, function () {
 let componentsList = {
     "styles": "css/font.css",
     "scripts": "bower_components/lodash/lodash.js",
+    "styleVars": { "primary-color": "#F00" , "font": "Roboto", "weight": 100},
     "rows": 20,
     "cols": 20,
     "plugins": [
