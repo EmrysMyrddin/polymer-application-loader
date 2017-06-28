@@ -10,7 +10,7 @@ class PolymerApplicationLoader {
    * @param apiUrl {String} Url of the API where the components and the components list are located
    * @param componentsListPath {String} Path of the components list
    */
-  static load (polymerElementId, componentsListUrl, defaultComponentUrl = '') {
+  static load (polymerElementId, componentsListUrl, defaultComponentUrl = '', webSocketUrl = '') {
     this._polymerElementId = polymerElementId;
     this._componentsListUrl = componentsListUrl;
     this._defaultComponentUrl = defaultComponentUrl;
@@ -22,6 +22,20 @@ class PolymerApplicationLoader {
     this._rowsFactor = 0;
     this._colsFactor = 0;
     this._styleVars = {};
+
+    if (webSocketUrl !== '') {
+      this.socket = new WebSocket(webSocketUrl);
+
+      this.socket.onmessage = (event) => {
+        if (event.data === 'componentsChanged') {
+          const elt = document.getElementById(this._polymerElementId);
+          while (elt.firstChild) {
+            elt.removeChild(elt.firstChild)
+          }
+          this.load(this._polymerElementId, this._componentsListUrl, this._defaultComponentUrl)
+        }
+      }
+    }
 
     // Launch components loading
     this._fetchComponentsList()
