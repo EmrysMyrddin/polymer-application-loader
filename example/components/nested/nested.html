@@ -1,13 +1,18 @@
 <link rel="import" href="/hello/hello.html" />
 <dom-module id="nested-item">
   <template>
-    <style include="shared-styles"></style>
+    <!--<style include="shared-styles"></style>-->
     <style include="font-awesome"></style>
     <style>
       :host {
         background: rgba(0,0,0,0.2);
         padding: 10px;
         text-align: center;
+      }
+      
+      h1 {
+        font-family: var(--font);
+        font-weight: var(--weight)
       }
       
       ::slotted(h1) {

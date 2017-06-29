@@ -21,10 +21,12 @@ class PolymerApplicationLoader {
     this._grid = false;
     this._rowsFactor = 0;
     this._colsFactor = 0;
+    this._styleVars = {};
 
     // Launch components loading
     this._fetchComponentsList()
       .then(() => this._loadStyles())
+      .then(() => this._addStyleVars())
       .then(() => this._loadScripts())
       .then(() => this._importComponentTemplates())
       .then(() => this._instanciateComponents());
@@ -47,6 +49,7 @@ class PolymerApplicationLoader {
                this._components = config.components || config.plugins;
                this._styles = config.styles;
                this._scripts = config.scripts;
+               this._styleVars = config.stylesvar || {};
              })
              .catch(err => console.log(err));
   }
@@ -70,6 +73,15 @@ class PolymerApplicationLoader {
       elt.href = style;
       document.head.appendChild(elt);
     })
+  }
+
+  /**
+   * Add style variables into the body element
+   */
+  static _addStyleVars () {
+    for(var style in this._styleVars) {
+      document.body.style.setProperty('--' + style, this._styleVars[style])
+    }
   }
 
   /**
@@ -125,9 +137,11 @@ class PolymerApplicationLoader {
           component.files = [ component.files ];
         }
 
-        component.files.forEach(file => {
+        component.name = component.name || '.';
+
+        component.frontend.files.forEach(file => {
           const componentUrl = component.url || this._defaultComponentUrl;
-          const url = componentUrl + '/' + component.componentName + '/' + file;
+          const url = componentUrl + '/' + component.name + '/' + file;
           if (this._templates[url] !== undefined) {
             return resolve()
           }
@@ -151,30 +165,44 @@ class PolymerApplicationLoader {
     return new Promise((resolve, reject) => {
       let insertElt = document.getElementById(this._polymerElementId);
       this._components.forEach(component => {
+        const eltName = component.frontend.eltName;
         // Verify if the component has an eltName
-        if (component.eltName === undefined) {
-          return resolve();
+        if (eltName === undefined) {
+          return reject();
         }
 
-        let elt = document.createElement(component.eltName);
-        elt.id = this._getUID(component.componentName);
-        for (let propName in component.propValues) {
-          if (component.propValues[propName] instanceof Object) {
-            elt.setAttribute(propName, JSON.stringify(component.propValues[propName]));
+        const propValues = component.frontend.props;
+        let elt = document.createElement(eltName);
+        elt.id = component.instanceId;
+        for (let propName in propValues) {
+          if (propValues[propName] instanceof Object) {
+            elt.setAttribute(propName, JSON.stringify(propValues[propName]));
           }else {
-            elt.setAttribute(propName, component.propValues[propName]);
+            elt.setAttribute(propName, propValues[propName]);
           }
         }
+        
+        if (component.backend !== undefined && component.backend.ports !== undefined) {
+          const back = component.backend.ports.map(port => 'http://localhost:' + port);
+          elt.setAttribute('back', JSON.stringify(back))
+        }
+
         if (component.slots != undefined) {
           this._addSlots(elt, component.slots)
         }
-        if (component.x !== undefined && component.y !== undefined && component.rows !== undefined && component.cols !== undefined && this._grid) {
+
+        const x = component.frontend.x;
+        const y = component.frontend.y;
+        const cols = component.frontend.cols;
+        const rows = component.frontend.rows;
+
+        if (x !== undefined && y !== undefined && rows !== undefined && cols !== undefined && this._grid) {
           elt.style.display = 'block';
           elt.style.position = 'absolute';
-          elt.style.left = component.x * this._colsFactor + '%';
-          elt.style.top = component.y * this._rowsFactor + '%';
-          elt.style.height = component.rows * this._rowsFactor + '%';
-          elt.style.width = component.cols * this._colsFactor + '%';
+          elt.style.left = x * this._colsFactor + '%';
+          elt.style.top = y * this._rowsFactor + '%';
+          elt.style.height = rows * this._rowsFactor + '%';
+          elt.style.width = cols * this._colsFactor + '%';
         }
         insertElt.appendChild(elt);
       })
