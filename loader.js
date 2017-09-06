@@ -5,23 +5,23 @@ class PolymerApplicationLoader {
    * Then load general scripts
    * Then import componnent templates
    * Then instanciate components
-   * 
+   *
    * @param polymerElementId {String} Id of the HTML that will encapsulate the components
    * @param apiUrl {String} Url of the API where the components and the components list are located
    * @param componentsListPath {String} Path of the components list
    */
-  static load (polymerElementId, componentsListUrl, defaultComponentUrl = '') {
-    this._polymerElementId = polymerElementId;
-    this._componentsListUrl = componentsListUrl;
-    this._defaultComponentUrl = defaultComponentUrl;
-    this._components = [];
-    this._styles = [];
-    this._idEltCount = 0;
-    this._templates = [];
-    this._grid = false;
-    this._rowsFactor = 0;
-    this._colsFactor = 0;
-    this._styleVars = {};
+  load(polymerElementId, componentsListUrl, defaultComponentUrl = '') {
+    this._polymerElementId = polymerElementId
+    this._componentsListUrl = componentsListUrl
+    this._defaultComponentUrl = defaultComponentUrl
+    this._components = []
+    this._styles = []
+    this._idEltCount = 0
+    this._templates = []
+    this._grid = false
+    this._rowsFactor = 0
+    this._colsFactor = 0
+    this._styleVars = {}
 
     // Launch components loading
     this._fetchComponentsList()
@@ -29,7 +29,7 @@ class PolymerApplicationLoader {
       .then(() => this._addStyleVars())
       .then(() => this._loadScripts())
       .then(() => this._importComponentTemplates())
-      .then(() => this._instanciateComponents());
+      .then(() => this._instanciateComponents())
   }
 
   /**
@@ -37,49 +37,45 @@ class PolymerApplicationLoader {
    * @returns {Promise}
    * @private
    */
-  static _fetchComponentsList () {
+  _fetchComponentsList() {
     return fetch(this._componentsListUrl)
-             .then(res => res.json())
-             .then(config => {
-               if (config.rows && config.cols) {
-                 this._rowsFactor = 100 / config.rows;
-                 this._colsFactor = 100 / config.cols;
-                 this._grid = true;
-               }
-               this._components = config.components || config.plugins;
-               this._styles = config.styles;
-               this._scripts = config.scripts;
-               this._styleVars = config.stylesvar || {};
-             })
-             .catch(err => console.log(err));
+      .then(res => res.json())
+      .then(config => {
+        if (config.rows && config.cols) {
+          this._rowsFactor = 100 / config.rows
+          this._colsFactor = 100 / config.cols
+          this._grid = true
+        }
+        this._components = config.components || config.plugins
+        this._styles = config.styles
+        this._scripts = config.scripts
+        this._styleVars = config.stylesvar || {}
+      })
+      .catch(err => console.log(err))
   }
 
   /**
    * Load every global styles
    * @private
    */
-  static _loadStyles () {
-    if (this._styles === undefined) {
-      return;
-    }
-    // Verify if files are in an array or not
-    if (!Array.isArray(this._styles)) {
-      this._styles = [this._styles];
-    }
-    this._styles.forEach(style => {
-      const elt = document.createElement('link');
-      elt.rel = 'stylesheet';
-      elt.type = 'text/css';
-      elt.href = style;
-      document.head.appendChild(elt);
+  _loadStyles() {
+    this._styles = this._wrapInArray(this._styles)
+    return Promise.all(this._styles.map(style => this._loadStyle(style)))
+  }
+
+  _loadStyle(href) {
+    return new Promise((onload, onerror) => {
+      const elt = document.createElement('link')
+      Object.assign(elt, { rel: 'stylesheet', type: 'text/css', onload, onerror, href })
+      document.head.appendChild(elt)
     })
   }
 
   /**
    * Add style variables into the body element
    */
-  static _addStyleVars () {
-    for(var style in this._styleVars) {
+  _addStyleVars() {
+    for (var style in this._styleVars) {
       document.body.style.setProperty('--' + style, this._styleVars[style])
     }
   }
@@ -88,39 +84,21 @@ class PolymerApplicationLoader {
    * Load every (external) scripts such as libraries
    * @private
    */
-  static _loadScripts () {
-    return new Promise((resolve, reject) => {
-      if (this._scripts === undefined) {
-        return resolve();
-      }
-      // Verify if files are in an array or not
-      if (!Array.isArray(this._scripts)) {
-        this._scripts = [this._scripts];
-      }
-
-      const fns = [];
-      this._scripts.forEach((script) => fns.push(() => this._loadScript(script)));
-      
-      // Resolve promise after every script loaded
-      fns.push(() => resolve())
-      fns.reduce((p, fn) => p.then(() => fn()), Promise.resolve())
-    })
+  _loadScripts() {
+    this._scripts = this._wrapInArray(this._scripts)
+    const promises = this._scripts.map(script => this._loadScript(script))
+    return Promise.all(promises)
   }
 
   /**
    * Create the promise to load the script
-   * @param {String} url
+   * @param {String} src
    */
-  static _loadScript (url) {
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-
-      script.async = true;
-      script.onload = resolve;
-      script.onerror = reject;
-      script.src = url;
-
-      document.head.appendChild(script);
+  _loadScript(src) {
+    return new Promise((onload, onerror) => {
+      const script = document.createElement('script')
+      Object.assign(script, { async: true, onload, onerror, src })
+      document.head.appendChild(script)
     })
   }
 
@@ -129,30 +107,23 @@ class PolymerApplicationLoader {
    * @returns {Promise}
    * @private
    */
-  static _importComponentTemplates () {
-    return new Promise((resolve, reject) => {
-      this._components.forEach(component => {
-        // Verify if files are in an array or not
-        if (!Array.isArray(component.files)) {
-          component.files = [ component.files ];
-        }
+  _importComponentTemplates() {
+    const promises = this._components.map(component => this._importComponentTemplate(component))
+    return Promise.all(promises)
+  }
 
-        component.name = component.name || '.';
+  _importComponentTemplate(component) {
+    return new Promise((onload, onerror) => {
+      const baseUrl = component.url || this._defaultComponentUrl
+      const { eltName, instanceId } = component
+      const href = `${baseUrl}/${eltName}/${instanceId}/`
 
-        component.frontend.files.forEach(file => {
-          const componentUrl = component.url || this._defaultComponentUrl;
-          const url = componentUrl + '/' + component.name + '/' + file;
-          if (this._templates[url] !== undefined) {
-            return resolve()
-          }
-          this._templates[url] = 1;
-          const link = document.createElement('link');
-          link.rel = 'import';
-          link.href = url;
-          document.head.appendChild(link);
-        });
-      });
-      resolve();
+      if (this._templates[eltName]) return onload()
+      this._templates[eltName] = true
+
+      const link = document.createElement('link')
+      Object.assign(link, { rel: 'import', href, onload, onerror })
+      document.head.appendChild(link)
     })
   }
 
@@ -161,53 +132,55 @@ class PolymerApplicationLoader {
    * @returns {Promise}
    * @private
    */
-  static _instanciateComponents () {
-    return new Promise((resolve, reject) => {
-      let insertElt = document.getElementById(this._polymerElementId);
-      this._components.forEach(component => {
-        const eltName = component.frontend.eltName;
-        // Verify if the component has an eltName
-        if (eltName === undefined) {
-          return reject();
-        }
+  _instanciateComponents() {
+    let insertElt = document.getElementById(this._polymerElementId)
+    this._components.forEach(component => {
+      const eltName = component.eltName
+      if (!eltName) console.error('Element name is missing on component', component)
 
-        const propValues = component.frontend.props;
-        let elt = document.createElement(eltName);
-        elt.id = component.instanceId;
-        for (let propName in propValues) {
-          if (propValues[propName] instanceof Object) {
-            elt.setAttribute(propName, JSON.stringify(propValues[propName]));
-          }else {
-            elt.setAttribute(propName, propValues[propName]);
-          }
-        }
-        
-        if (component.backend !== undefined && component.backend.ports !== undefined) {
-          const back = component.backend.ports.map(port => 'http://localhost:' + port);
-          elt.setAttribute('back', JSON.stringify(back))
-        }
+      const elt = document.createElement(eltName)
+      elt.id = component.instanceId
 
-        if (component.slots != undefined) {
-          this._addSlots(elt, component.slots)
-        }
+      this._stringifyProps(component.frontend.props).forEach(([name, value]) =>
+        elt.setAttribute(name, value),
+      )
 
-        const x = component.frontend.x;
-        const y = component.frontend.y;
-        const cols = component.frontend.cols;
-        const rows = component.frontend.rows;
+      if (component.backend && component.backend.ports) {
+        elt.setAttribute('back', 'http://localhost' + component.backend.port)
+      }
 
-        if (x !== undefined && y !== undefined && rows !== undefined && cols !== undefined && this._grid) {
-          elt.style.display = 'block';
-          elt.style.position = 'absolute';
-          elt.style.left = x * this._colsFactor + '%';
-          elt.style.top = y * this._rowsFactor + '%';
-          elt.style.height = rows * this._rowsFactor + '%';
-          elt.style.width = cols * this._colsFactor + '%';
-        }
-        insertElt.appendChild(elt);
-      })
-      resolve();
+      if (component.slots) this._addSlots(elt, component.slots)
+
+      const { x, y, cols, rows } = component.frontend
+      if (x != null && y != null && rows && cols && this._grid) {
+        Object.assign(elt.style, {
+          display: 'block',
+          position: 'absolute',
+          left: x * this._colsFactor + '%',
+          top: y * this._rowsFactor + '%',
+          height: rows * this._rowsFactor + '%',
+          width: cols * this._colsFactor + '%',
+        })
+      }
+
+      insertElt.appendChild(elt)
     })
+  }
+
+  /**
+   * Turns a map of props into a list of tuples (name, value) with a stringifyed value if necessary
+   * @param {Object} props
+   * @return {Array<[string, string]>} The list of tuples of props
+   */
+  _stringifyProps(props) {
+    return Object.keys(props)
+      .map(propName => {
+        const value = props[propName]
+        if (typeof value === 'boolean' && !value) return
+        const stringValue = value instanceof Object ? JSON.stringify(value) : value
+        return [propName, stringValue]
+      })
+      .filter(prop => prop)
   }
 
   /**
@@ -215,34 +188,27 @@ class PolymerApplicationLoader {
    * @param {HTMLElement} elt Create component element
    * @param {Array} slots Slots to add to the page
    */
-  static _addSlots (elt, slots) {
+  _addSlots(elt, slots) {
     if (!Array.isArray(slots)) {
-      slots = [slots];
+      slots = [slots]
     }
-    slots.forEach((slot) => {
-      let slotElt = document.createElement(slot.tag);
-      slotElt.slot = slot.name;
-      if (slot.className !== undefined) {
-        slotElt.className = slot.className;
-      }
-      if (slot.content !== undefined) {
-        slotElt.innerHTML = slot.content;
-      }
+    slots.forEach(slot => {
+      let slotElt = document.createElement(slot.tag)
+      slotElt.slot = slot.name
+
+      if (slot.className) slotElt.className = slot.className
+      if (slot.content) slotElt.innerHTML = slot.content
+
       elt.appendChild(slotElt)
-    });
+    })
   }
 
-	/**
-	 * Generate a unique ID for the component with the name passed as parameter
-	 * @param componentName {String}
-	 * @returns {string} an unique ID
-	 * @private
-	 */
-  static _getUID(componentName) {
-    this._idEltCount++;
-
-    let r = Math.random().toString(32).substr(4, 24);
-    return componentName + '_' + r + '_' + this._idEltCount;
+  /**
+   * Wraps if necessary an item into an array.
+   * @param {Array | *} item The item to wrap or an array of item
+   * @return {Array} An array with the item or the given array of tiems
+   */
+  _wrapInArray(item) {
+    return item ? (Array.isArray(item) ? item : [item]) : []
   }
-
 }
