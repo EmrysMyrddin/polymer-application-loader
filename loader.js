@@ -24,12 +24,14 @@ class PolymerApplicationLoader {
     this._styleVars = {}
 
     // Launch components loading
-    this._fetchComponentsList()
+    return this._fetchComponentsList()
       .then(() => this._loadStyles())
       .then(() => this._addStyleVars())
       .then(() => this._loadScripts())
       .then(() => this._importComponentTemplates())
       .then(() => this._instanciateComponents())
+      .then(() => this._config)
+      .catch(() => {})
   }
 
   /**
@@ -46,6 +48,7 @@ class PolymerApplicationLoader {
           this._colsFactor = 100 / config.cols
           this._grid = true
         }
+        this._config = config
         this._components = config.components || config.plugins
         this._styles = config.styles
         this._scripts = config.scripts
